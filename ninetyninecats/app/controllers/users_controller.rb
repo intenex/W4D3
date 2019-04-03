@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  before_action :check_login, only: [:new]
+
   def new
     render :new
   end
@@ -6,7 +8,7 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      redirect_to user_url(@user)
+      login_user!(@user)
     else
       render json: @user.errors.full_messages, status: 422 
     end

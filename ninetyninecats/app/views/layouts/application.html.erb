@@ -9,6 +9,29 @@
   </head>
 
   <body>
+  <header>
+    <ul>
+      <% if current_user %>
+        <li><%= current_user.user_name  %></li>
+        <li>
+          <form id="logout" action="<%= session_url %>" method="POST">
+            <input type="hidden" name="_method" value="DELETE">
+          </form>
+          <button type="submit" form="logout" value="Logout">Logout</button>
+          <%# button_to "Logout", session_url, method: :delete %>
+        </li>
+      <% else %>
+        <li>
+          <form id="login" action="<%= new_session_url %>" method="GET">
+          </form>
+          <button type="submit" form="login" value="Login">Login</button>
+        </li>
+      <% end%>
+
+    </ul>
+  </header>
+  
+
     <%= yield %>
   </body>
 </html>
