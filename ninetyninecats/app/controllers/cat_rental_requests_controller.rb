@@ -1,6 +1,5 @@
 class CatRentalRequestsController < ApplicationController
   before_action :redirect_unless_owner, only: [:approve, :deny]
-  helper_method :is_owner?
 
   def approve
     current_cat_rental_request.approve!
@@ -28,7 +27,6 @@ class CatRentalRequestsController < ApplicationController
   end
 
   private
-
   def current_cat_rental_request
     @rental_request ||=
       CatRentalRequest.includes(:cat).find(params[:id])
@@ -43,13 +41,9 @@ class CatRentalRequestsController < ApplicationController
   end
 
   def redirect_unless_owner
-    check_login
-    unless is_owner?
+    only_if_logged_in
+    unless is_owner?(current_cat)
       redirect_to cats_url
     end
-  end
-
-  def is_owner?
-    current_user.cats.include?(current_cat)
   end
 end

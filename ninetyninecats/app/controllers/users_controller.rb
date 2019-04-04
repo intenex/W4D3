@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :unless_logged_in, only: [:new]
+  before_action :only_if_logged_out, only: [:new]
 
   def new
     render :new

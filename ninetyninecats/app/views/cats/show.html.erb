@@ -5,10 +5,10 @@
     <th>Attribute</th>
     <th>Value</th>
   </tr>
-  <% [:age, :birth_date, :color, :sex].each do |attr_name| %>
+  <% [:age, :birth_date, :color, :sex, :owner].each do |attr_name| %>
     <tr>
       <td><%= attr_name %></td>
-      <td><%= @cat.send(attr_name) %></td>
+      <td><%= @cat.send(attr_name).to_s %></td>
     </tr>
   <% end %>
 </table>
@@ -16,7 +16,10 @@
 <p>
   <%= @cat.description %>
 </p>
+
+<% if is_owner?(@cat) %>
 <a href="<%= edit_cat_url(@cat) %>">Edit <%= @cat.name %></a>
+<% end %>
 
 <h2>Rental Requests</h2>
 <table>
@@ -26,7 +29,7 @@
     <th>Status</th>
     <th>Requester</th>
   </tr>
-  <% @cat.rental_requests.includes(:requester).order('start_date').each do |req| %>
+  <% @cat.rental_requests.includes(:requester, :cat).order('start_date').each do |req| %>
     <%= render 'req_tr', req: req %>
   <% end %>
 </table>

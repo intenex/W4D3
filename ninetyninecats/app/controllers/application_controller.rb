@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
 
   helper_method :current_user
+  helper_method :is_owner?
 
   def current_user
     @current_user ||= User.find_by(session_token: session[:session_token])
@@ -14,16 +15,12 @@ class ApplicationController < ActionController::Base
     !!(current_user)
   end
 
-  def unless_logged_in
-    if current_user
-      redirect_to cats_url
-    end
+  def only_if_logged_out
+    redirect_to cats_url if logged_in?
   end
 
   def only_if_logged_in
-    unless current_user
-      redirect_to cats_url
-    end
+    redirect_to cats_url unless logged_in?
   end
 
   def login_user!(user)    
@@ -34,6 +31,10 @@ class ApplicationController < ActionController::Base
       flash[:errors] = ['Wrong credentials were input!']
       redirect_to new_session_url
     end
+  end
+
+  def is_owner?(cat)
+    current_user.id == cat.user_id
   end
 
   def logout!
