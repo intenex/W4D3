@@ -11,24 +11,34 @@
   <body>
   <header>
     <ul>
+        <li>
+          <%= link_to 'All Cats', cats_url %>
+        </li>
       <% if current_user %>
         <li><%= current_user.user_name  %></li>
         <li>
           <form id="logout" action="<%= session_url %>" method="POST">
             <input type="hidden" name="_method" value="DELETE">
+            <input type="hidden" name="authenticity_token" value="<%=form_authenticity_token%>">
+            <button type="submit">Logout</button>
           </form>
-          <button type="submit" form="logout" value="Logout">Logout</button>
-          <%# button_to "Logout", session_url, method: :delete %>
+          <%#= button_to "Logout", session_url, method: :delete %>
         </li>
       <% else %>
         <li>
-          <form id="login" action="<%= new_session_url %>" method="GET">
+          <form id="sign_up" action="<%= new_user_url %>" method="GET">
+            <button type="submit">Sign Up!</button>
           </form>
-          <button type="submit" form="login" value="Login">Login</button>
+        </li>
+        <li>
+          <form id="login" action="<%= new_session_url %>" method="GET">
+            <input type="submit" value="Login!">
+          </form>
         </li>
       <% end%>
-
     </ul>
+
+    <%= render 'shared/errors' %>
   </header>
   
 

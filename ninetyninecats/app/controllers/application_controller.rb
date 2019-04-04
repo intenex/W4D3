@@ -4,13 +4,23 @@ class ApplicationController < ActionController::Base
 
   def current_user
     @current_user ||= User.find_by(session_token: session[:session_token])
+    # for multiple sessions, change to
+    # @current_user ||= Session.find_by(session_token: session[:session_token]).user
+    # Session is a model for all our sessions, with columns session_token, user_id
+    # it has a association belongs_to :user, class_name: :User, foreign_key: :user_id
   end
 
   def logged_in?
     !!(current_user)
   end
 
-  def check_login
+  def unless_logged_in
+    if current_user
+      redirect_to cats_url
+    end
+  end
+
+  def only_if_logged_in
     unless current_user
       redirect_to cats_url
     end
@@ -19,9 +29,9 @@ class ApplicationController < ActionController::Base
   def login_user!(user)    
     if user
       session[:session_token] = user.session_token
-      redirect_to user_url(user)
+      redirect_to cats_url
     else
-      flash[:errors] = 'Wrong credentials were input!'
+      flash[:errors] = ['Wrong credentials were input!']
       redirect_to new_session_url
     end
   end

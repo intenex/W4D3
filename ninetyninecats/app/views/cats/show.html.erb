@@ -13,6 +13,9 @@
   <% end %>
 </table>
 
+<p>
+  <%= @cat.description %>
+</p>
 <a href="<%= edit_cat_url(@cat) %>">Edit <%= @cat.name %></a>
 
 <h2>Rental Requests</h2>
@@ -23,7 +26,7 @@
     <th>Status</th>
     <th>Requester</th>
   </tr>
-  <% @cat.rental_requests.order('start_date').each do |req| %>
+  <% @cat.rental_requests.includes(:requester).order('start_date').each do |req| %>
     <%= render 'req_tr', req: req %>
   <% end %>
 </table>

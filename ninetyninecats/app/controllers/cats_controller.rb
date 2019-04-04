@@ -1,5 +1,5 @@
 class CatsController < ApplicationController
-  before_action :check_login, only: [:new, :create]
+  before_action :only_if_logged_in, only: [:new, :create]
   before_action :check_ownership, only: [:edit, :update]
 
   def index
@@ -50,7 +50,7 @@ class CatsController < ApplicationController
   end
 
   def check_ownership
-    check_login
+    only_if_logged_in
     cat = Cat.find(params[:id])
     unless current_user.cats.include?(cat)
       redirect_to cats_url

@@ -1,5 +1,5 @@
 class SessionsController < ApplicationController
-  before_action :check_login, only: [:new]
+  before_action :unless_logged_in, only: [:new]
   
   def new
     render :new
