@@ -34,7 +34,11 @@ class ApplicationController < ActionController::Base
   end
 
   def is_owner?(cat)
-    current_user.id == cat.user_id
+    if logged_in?
+      current_user.id == cat.user_id
+    else
+      false 
+    end
   end
 
   def logout!
